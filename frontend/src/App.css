@@ -1,0 +1,289 @@
+/* src/App.css */
+
+/* 기본적인 리셋 */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f0f2f5; /* Figma 배경색과 비슷하게 */
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* IntroPage 스타일 */
+.intro-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.nav ul {
+  display: flex;
+  gap: 20px;
+}
+
+.hamburger-menu {
+  display: none; /* 기본적으로 숨김, 미디어 쿼리로 모바일에서 표시 */
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.hero-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 20px;
+  background-color: #f8f8f8; /* Figma 배경색과 비슷하게 */
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.hero-content {
+  max-width: 500px;
+}
+
+.hero-content h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.hero-content p {
+  font-size: 18px;
+  margin-bottom: 30px;
+  color: #555;
+}
+
+.button-primary {
+  padding: 15px 30px;
+  background-color: #f7d100; /* Figma 버튼 색상 */
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  color: #333;
+  font-weight: bold;
+}
+
+.hero-image img {
+  max-width: 400px;
+  height: auto;
+}
+
+.service-features,
+.cta-section {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.service-features h2,
+.cta-section h2 {
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-item {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.footer {
+  background-color: #333;
+  color: #fff;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: auto; /* 푸터를 하단에 고정 */
+}
+
+.footer-logo {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.footer-links ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-links a {
+  color: #ccc;
+}
+
+.footer-address p,
+.footer-copy p {
+  font-size: 14px;
+  color: #ccc;
+}
+
+/* Login/SignUpPage 스타일 */
+.login-container,
+.signup-container,
+.mypage-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f8f8; /* Figma 배경색과 비슷하게 */
+}
+
+.login-box,
+.signup-box,
+.mypage-content {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-box h2,
+.signup-box h2,
+.mypage-content h2 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="text"],
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box; /* padding이 너비에 포함되도록 */
+}
+
+.login-button,
+.signup-button,
+.submit-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #f7d100; /* Figma 버튼 색상 */
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.cancel-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #ccc;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.login-links {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.login-links a {
+  color: #007bff;
+  margin: 0 10px;
+}
+
+/* MyPage 관련 스타일 (Admin Approval form) */
+.mypage-content .approval-form {
+  text-align: left; /* 폼 내부 요소는 왼쪽 정렬 */
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 */
+@media (max-width: 768px) {
+  .nav ul {
+    display: none; /* 모바일에서 내비게이션 숨김 */
+  }
+
+  .hamburger-menu {
+    display: block; /* 모바일에서 햄버거 메뉴 표시 */
+  }
+
+  .hero-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-content h1 {
+    font-size: 36px;
+  }
+
+  .hero-image img {
+    max-width: 300px;
+  }
+
+  .footer {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-links ul {
+    align-items: center;
+  }
+}
