@@ -1,100 +1,97 @@
+// frontend/src/pages/IntroPage.tsx
 import React from "react";
-import "../App.css"; // App.css를 가져와서 사용하거나, 별도의 CSS 파일을 생성할 수 있습니다.
+import { Link } from "react-router-dom";
 
 const IntroPage: React.FC = () => {
   return (
-    <div className="intro-container">
-      {/* 헤더 섹션 - 로고, 내비게이션 */}
-      <header className="header">
-        <div className="logo">Logo</div>
-        <nav className="nav">
-          <ul>
-            <li>
-              <a href="/">Home</a>
-            </li>
-            <li>
-              <a href="/login">Login</a>
-            </li>
-            <li>
-              <a href="/signup">Sign Up</a>
-            </li>
-            {/* 추가 메뉴 아이템들 */}
-          </ul>
-        </nav>
-        {/* 모바일 햄버거 메뉴 버튼 */}
-        <button className="hamburger-menu">☰</button>
-      </header>
-
-      {/* Intro 섹션 - "밥메이킹으로 맘껏 만들자!" */}
-      <section className="hero-section">
-        <div className="hero-content">
-          <h1>
-            밥메이킹으로 <br /> '밥친구' 만들자!
+    <div className="flex flex-col items-center">
+      {/* 첫 번째 섹션: 메인 비주얼 */}
+      <section className="relative w-full h-[600px] flex items-center justify-center bg-gray-100">
+        <img
+          src="/main-visual.png"
+          alt="Main Visual"
+          className="object-cover w-full h-full"
+        />
+        <div className="absolute text-center text-white p-4 bg-black bg-opacity-50 rounded-lg">
+          <h1 className="text-4xl font-bold font-heading-desktop-h2 mb-4">
+            '밥메이팅'으로 <br /> '밥친구 만들자!'
           </h1>
-          <p>어쩌고 저쩌고 우리의 서비스에 대한 설명이 들어갑니다.</p>
-          <button className="button-primary">Button D...</button>
-        </div>
-        <div className="hero-image">
-          {/* 이미지 또는 아이콘 */}
-          <img src="/Preview.png" alt="서비스 소개 이미지" />{" "}
-          {/* public 폴더의 Preview.png 사용 예시 */}
-        </div>
-      </section>
-
-      {/* 서비스 소개 섹션 */}
-      <section className="service-features">
-        <h2>어떤 기능이 있을까요?</h2>
-        <div className="feature-grid">
-          <div className="feature-item">
-            <h3>편리한 계정 관리</h3>
-            <p>설명...</p>
-          </div>
-          <div className="feature-item">
-            <h3>다양한 식사 모임</h3>
-            <p>설명...</p>
-          </div>
-          <div className="feature-item">
-            <h3>실시간 채팅 기능</h3>
-            <p>설명...</p>
-          </div>
+          <p className="text-xl font-text-regular-normal">
+            새로운 사람들과 함께 식사하며 즐거운 시간을 보내세요.
+          </p>
+          <Link to="/signup">
+            <button className="mt-8 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-m3-title-medium">
+              밥메이팅 시작하기
+            </button>
+          </Link>
         </div>
       </section>
 
-      {/* 또 다른 소개 섹션 - "밥메이킹과 함께라면..." */}
-      <section className="cta-section">
-        <div className="cta-content">
-          <h2>밥메이킹과 함께라면...</h2>
-          <p>더 상세한 서비스 설명이 들어갑니다.</p>
+      {/* 두 번째 섹션: 서비스 소개 */}
+      <section className="w-full py-20 px-4 md:px-20 bg-white text-center">
+        <h2 className="text-3xl font-bold font-heading-desktop-h2 mb-12">
+          밥메이팅은 이런 서비스에요
+        </h2>
+        <div className="flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-12">
+          <div className="flex flex-col items-center">
+            <img
+              src="/intro-illustration-1.png"
+              alt="Illustration 1"
+              className="w-[300px] h-auto mb-4"
+            />
+            <h3 className="text-xl font-semibold font-heading-desktop-h5 mb-2">
+              랜덤 매칭
+            </h3>
+            <p className="text-gray-600 font-text-regular-normal">
+              다양한 사람들과 새로운 만남
+            </p>
+          </div>
+          <div className="flex flex-col items-center">
+            <img
+              src="/intro-illustration-2.png"
+              alt="Illustration 2"
+              className="w-[300px] h-auto mb-4"
+            />
+            <h3 className="text-xl font-semibold font-heading-desktop-h5 mb-2">
+              선호도 기반 매칭
+            </h3>
+            <p className="text-gray-600 font-text-regular-normal">
+              취향에 맞는 밥친구 찾기
+            </p>
+          </div>
         </div>
-        <div className="cta-image">{/* 이미지 또는 아이콘 */}</div>
       </section>
 
-      {/* 푸터 섹션 */}
-      <footer className="footer">
-        <div className="footer-logo">Logo</div>
-        <div className="footer-links">
-          <ul>
-            <li>
-              <a href="#">About Us</a>
-            </li>
-            <li>
-              <a href="#">Contact</a>
-            </li>
-            <li>
-              <a href="#">Privacy Policy</a>
-            </li>
-          </ul>
+      {/* 세 번째 섹션: 밥메이팅 이용 방법 */}
+      <section className="w-full py-20 px-4 md:px-20 bg-gray-50 text-center">
+        <h2 className="text-3xl font-bold font-heading-desktop-h2 mb-12">
+          밥메이팅이라면...
+        </h2>
+        <div className="flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-12">
+          <img
+            src="/intro-illustration-1.png"
+            alt="Figma Hand"
+            className="w-[400px] h-auto"
+          />{" "}
+          {/* 실제 이미지로 교체 */}
+          <div className="text-left max-w-lg">
+            <h3 className="text-2xl font-semibold font-heading-desktop-h5 mb-4">
+              즐거운 식사 경험을 만들어 보세요
+            </h3>
+            <p className="text-gray-700 font-text-regular-normal leading-relaxed">
+              매칭 시스템을 통해 새로운 사람들과 식사를 하고, 다양한 취향을 가진
+              사람들과의 교류를 경험하며 새로운 친구를 만들 수 있습니다.
+            </p>
+            <Link to="/about">
+              {" "}
+              {/* 적절한 About 페이지 링크 */}
+              <button className="mt-8 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-m3-title-medium">
+                더 알아보기
+              </button>
+            </Link>
+          </div>
         </div>
-        <div className="footer-address">
-          <p>Zogo</p>
-          <p>서울특별시 강남구 테헤란로 123-456</p>
-          <p>대표: 김밥</p>
-          <p>전화: 02-1234-5678</p>
-        </div>
-        <div className="footer-copy">
-          <p>&copy; 2024 Zogo. All rights reserved.</p>
-        </div>
-      </footer>
+      </section>
     </div>
   );
 };

@@ -1,1 +1,24 @@
-@import "tailwindcss";
+/* frontend/src/index.css (Tailwind CSS v3.x용) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Figma 디자인의 CSS 변수들을 여기에 정의합니다 */
+:root {
+  --color-schemes-color-scheme-1-background: #fefcf3;
+  --color-schemes-color-scheme-1-on-background: #2f2f2f;
+  --color-schemes-color-scheme-1-primary: #4a90e2;
+  --color-schemes-color-scheme-1-on-primary: #ffffff;
+  --color-schemes-color-scheme-1-secondary: #ffd600;
+  --color-schemes-color-scheme-1-on-secondary: #2f2f2f;
+
+  /* Figma의 폰트 패밀리도 여기에 정의하여 Tailwind에서 사용하도록 합니다. */
+  /* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap'); */
+}
+
+/* 기본 폰트 설정 (만약 Tailwind config에서 하지 않는다면 여기에) */
+body {
+  font-family: "Noto Sans KR", sans-serif; /* Fallback 폰트 */
+  color: var(--color-schemes-color-scheme-1-on-background);
+  background-color: var(--color-schemes-color-scheme-1-background);
+}
