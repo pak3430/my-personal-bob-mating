@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom"; // useSearchParams 추가
 import Button from "../components/common/Button";
-import { acceptMatching, rejectMatching } from "../api/matching"; // API 함수 임포트
+import { cancelMatching } from "../api"; // API 함수 임포트
 
 interface MatchDetails {
   id: string;
@@ -46,18 +46,10 @@ const MatchingSchedulePage: React.FC = () => {
 
   const handleAccept = async () => {
     if (matchDetails) {
-      setIsLoading(true);
-      setError(null);
-      try {
-        await acceptMatching(matchDetails.id); // API 호출
-        setMatchDetails({ ...matchDetails, status: "accepted" });
-        alert("매칭이 수락되었습니다. 채팅방으로 이동합니다.");
-        navigate(`/chat/${matchDetails.id}`);
-      } catch (err: any) {
-        setError(err.message || "매칭 수락에 실패했습니다.");
-      } finally {
-        setIsLoading(false);
-      }
+      // TODO: 매칭 수락 API 호출 구현 필요
+      setMatchDetails({ ...matchDetails, status: "accepted" });
+      alert("매칭이 수락되었습니다. 채팅방으로 이동합니다.");
+      navigate(`/chat/${matchDetails.id}`);
     }
   };
 
@@ -66,7 +58,7 @@ const MatchingSchedulePage: React.FC = () => {
       setIsLoading(true);
       setError(null);
       try {
-        await rejectMatching(matchDetails.id); // API 호출
+        await cancelMatching(parseInt(matchDetails.id)); // API 호출
         setMatchDetails({ ...matchDetails, status: "rejected" });
         alert("매칭을 거절했습니다.");
         navigate("/mypage");

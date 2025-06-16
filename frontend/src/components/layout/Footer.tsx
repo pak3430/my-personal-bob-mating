@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
     <footer className="w-full py-12 px-4 md:px-20 bg-gray-800 text-white text-center">
       <CompanyLogo className="h-10 mx-auto mb-4" />
       <p className="text-sm font-text-small-normal">
-        &copy; {new Date().getFullYear()} 밥메이팅. All rights reserved.
+        &copy; {new Date().getFullYear()} YUMM. All rights reserved.
       </p>
       <div className="mt-4 flex justify-center space-x-6 text-sm font-text-small-link">
         <Link to="/privacy" className="hover:underline">

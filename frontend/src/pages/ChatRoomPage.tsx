@@ -3,11 +3,12 @@ import React, { useState, useEffect, useRef } from "react";
 import ChatMessage from "../components/chat/ChatMessage";
 import ChatInput from "../components/chat/ChatInput";
 import { useParams } from "react-router-dom";
-import {
-  getChatMessages,
-  sendChatMessage,
-  getChatWebSocketUrl,
-} from "../api/chat";
+import { getChatMessages, sendChatMessage } from "../api";
+
+// WebSocket URL 생성 함수 (로컬)
+const getChatWebSocketUrl = (roomId: string) => {
+  return `ws://localhost:8080/ws/chat/${roomId}`;
+};
 
 interface Message {
   id: number;
@@ -35,11 +36,12 @@ const ChatRoomPage: React.FC = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await getChatMessages(roomId);
+        const response = await getChatMessages(parseInt(roomId));
+        const data = response.data;
         setMessages(
           data.map((msg: any) => ({
             ...msg,
-            isMyMessage: msg.sender_id === currentUserId, // 내 메시지 여부 판단
+            isMyMessage: msg.senderId === currentUserId, // 내 메시지 여부 판단
           }))
         );
       } catch (err: any) {
@@ -93,7 +95,7 @@ const ChatRoomPage: React.FC = () => {
     if (!roomId) return;
     try {
       // API 호출 (데이터베이스 저장)
-      await sendChatMessage(roomId, content);
+      await sendChatMessage(parseInt(roomId), content, parseInt(currentUserId));
 
       // WebSocket으로도 메시지 전송 (옵션: 백엔드에서 브로드캐스트하는 경우 이 단계 생략 가능)
       // wsRef.current?.send(JSON.stringify({

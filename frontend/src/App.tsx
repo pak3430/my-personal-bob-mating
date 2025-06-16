@@ -10,6 +10,7 @@ import MatchingLoadingPage from "./pages/MatchingLoadingPage";
 import MatchingSchedulePage from "./pages/MatchingSchedulePage";
 import SettingsPage from "./pages/SettingsPage";
 import Layout from "./components/layout/Layout";
+import PrivateRoute from "./components/auth/PrivateRoute";
 import "./App.css"; // App.css (필요시)
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          {/* Layout 컴포넌트로 감싸는 페이지들 */}
+          {/* 공개 페이지들 */}
           <Route
             path="/"
             element={
@@ -42,46 +43,59 @@ function App() {
               </Layout>
             }
           />
+
+          {/* 보호된 페이지들 - 인증 필요 */}
           <Route
             path="/mypage"
             element={
-              <Layout>
-                <MyPage />
-              </Layout>
+              <PrivateRoute>
+                <Layout>
+                  <MyPage />
+                </Layout>
+              </PrivateRoute>
             }
           />
           <Route
             path="/chat/:roomId"
             element={
-              <Layout>
-                <ChatRoomPage />
-              </Layout>
+              <PrivateRoute>
+                <Layout>
+                  <ChatRoomPage />
+                </Layout>
+              </PrivateRoute>
             }
           />
           <Route
             path="/matching-loading"
             element={
-              <Layout>
-                <MatchingLoadingPage />
-              </Layout>
+              <PrivateRoute>
+                <Layout>
+                  <MatchingLoadingPage />
+                </Layout>
+              </PrivateRoute>
             }
           />
           <Route
             path="/matching-schedule"
             element={
-              <Layout>
-                <MatchingSchedulePage />
-              </Layout>
+              <PrivateRoute>
+                <Layout>
+                  <MatchingSchedulePage />
+                </Layout>
+              </PrivateRoute>
             }
           />
           <Route
             path="/settings"
             element={
-              <Layout>
-                <SettingsPage />
-              </Layout>
+              <PrivateRoute>
+                <Layout>
+                  <SettingsPage />
+                </Layout>
+              </PrivateRoute>
             }
           />
+          {/* TODO: 추가될 페이지 라우트 */}
         </Routes>
       </div>
     </Router>

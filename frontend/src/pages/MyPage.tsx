@@ -7,18 +7,27 @@ import { useMatching } from "../hooks/useMatching";
 
 const MyPage: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useAuth(); // 인증 훅에서 사용자 정보 가져오기
-  const { matchingResults, fetchMatchingResults } = useMatching();
+  const { user, isAuthenticated, isLoading } = useAuth(); // 인증 훅에서 사용자 정보 가져오기
+  const { matchingResults, fetchMatchingStatus } = useMatching();
 
   useEffect(() => {
-    if (!user) {
-      // 로그인되지 않았다면 로그인 페이지로 리다이렉트
-      navigate("/login");
-    } else {
-      // 사용자 ID를 기반으로 매칭 결과 불러오기
-      fetchMatchingResults(user.id); // 실제 사용자 ID를 전달해야 함
+    console.log("🔍 MyPage - 현재 인증 상태:", {
+      user,
+      isAuthenticated,
+      isLoading,
+    });
+
+    if (!isLoading) {
+      if (!user || !isAuthenticated) {
+        console.log("🚫 인증되지 않은 사용자, 로그인 페이지로 리다이렉트");
+        navigate("/login");
+      } else {
+        console.log("✅ 인증된 사용자:", user);
+        // 사용자 ID를 기반으로 매칭 결과 불러오기
+        fetchMatchingStatus(); // 여기서 user.id를 넘길 필요 없음
+      }
     }
-  }, [user, navigate, fetchMatchingResults]);
+  }, [user, isAuthenticated, isLoading, navigate, fetchMatchingStatus]);
 
   const handleViewChat = (matchId: string) => {
     navigate(`/chat/${matchId}`);
@@ -29,23 +38,47 @@ const MyPage: React.FC = () => {
     navigate(`/matching-schedule?matchId=${matchId}`);
   };
 
-  if (!user) {
+  // 로딩 중일 때
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-lg">로딩 중...</div>
+      </div>
+    );
+  }
+
+  // 사용자 정보가 없을 때
+  if (!user || !isAuthenticated) {
     return <div className="p-4 md:p-8">로그인 정보가 없습니다.</div>;
   }
 
-  // TODO: 실제 사용자 데이터 (ERD User 테이블)를 API로 가져와서 표시
+  // 실제 사용자 데이터 사용
   const currentUser = {
-    name: user.name || "사용자", // 실제 데이터로 대체
+    name: user.nickname, // 백엔드 응답에서 nickname을 name으로 사용
     email: user.email,
-    nickname: user.nickname || "밥메이트",
-    gender: user.gender || "미정",
-    age: user.age || "미정",
-    introduction: user.introduction || "자기소개를 입력해주세요.",
-    profileImage: user.profileImage || "/avatar-image.png", // 프로필 이미지 경로
+    nickname: user.nickname,
+    gender:
+      user.gender === "MALE"
+        ? "남성"
+        : user.gender === "FEMALE"
+        ? "여성"
+        : "미정",
+    age: user.age,
+    phoneNumber: user.phoneNumber,
+    introduction: "자기소개를 입력해주세요.", // 추후 백엔드에 introduction 필드 추가 시 사용
+    profileImage: user.profileImageUrl || "/avatar-image.png", // 프로필 이미지 경로
   };
 
   return (
     <div className="p-4 md:p-8 bg-color-schemes-color-scheme-1-background min-h-screen">
+      {/* 디버깅 정보 (개발용) */}
+      <div className="mb-4 p-4 bg-blue-50 rounded-lg">
+        <h3 className="font-bold text-blue-800">🔍 디버깅 정보 (개발용)</h3>
+        <pre className="text-sm text-blue-600 mt-2">
+          {JSON.stringify({ user, isAuthenticated, isLoading }, null, 2)}
+        </pre>
+      </div>
+
       <h1 className="text-4xl font-heading-desktop-h2 mb-8">My Page</h1>
 
       {/* 사용자 정보 섹션 */}
@@ -82,6 +115,9 @@ const MyPage: React.FC = () => {
             <strong>Age:</strong> {currentUser.age}
           </p>
           <p>
+            <strong>Phone:</strong> {currentUser.phoneNumber}
+          </p>
+          <p className="md:col-span-2">
             <strong>Introduction:</strong> {currentUser.introduction}
           </p>
         </div>

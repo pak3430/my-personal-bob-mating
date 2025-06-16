@@ -4,6 +4,7 @@ import com.example.demo.dto.auth.AccessTokenResponseDto;
 import com.example.demo.dto.auth.LoginRequest;
 import com.example.demo.dto.auth.AuthResponseDto;
 import com.example.demo.dto.auth.LogoutRequest;
+import com.example.demo.dto.auth.RegisterRequest;
 
 /**
  * 인증 관련 서비스 인터페이스
@@ -19,6 +20,13 @@ public interface AuthService {
      * @return 로그인 성공 시 발급된 Access Token과 Refresh Token 정보를 담은 DTO.
      */
     AuthResponseDto login(LoginRequest loginRequest);
+
+    /**
+     * 새로운 사용자를 등록합니다.
+     *
+     * @param registerRequest 회원가입 요청에 필요한 사용자 정보를 담은 DTO.
+     */
+    void register(RegisterRequest registerRequest);
 
         
     /**
