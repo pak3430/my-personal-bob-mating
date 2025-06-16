@@ -1,27 +1,35 @@
 // frontend/src/pages/IntroPage.tsx
 import React from "react";
 import { Link } from "react-router-dom";
+import ApiTest from "../components/debug/ApiTest";
 
 const IntroPage: React.FC = () => {
   return (
     <div className="flex flex-col items-center">
+      {/* API 테스트 섹션 (개발용)
+      <section className="w-full py-10 px-4 md:px-20 bg-yellow-50">
+        <div className="max-w-2xl mx-auto">
+          <ApiTest />
+        </div>
+      </section> */}
+
       {/* 첫 번째 섹션: 메인 비주얼 */}
-      <section className="relative w-full h-[600px] flex items-center justify-center bg-gray-100">
+      <section className="relative w-full h-[550px] flex items-center justify-center bg-gray-100">
         <img
-          src="/main-visual.png"
+          src="/yellow-tray.png"
           alt="Main Visual"
           className="object-cover w-full h-full"
         />
         <div className="absolute text-center text-white p-4 bg-black bg-opacity-50 rounded-lg">
           <h1 className="text-4xl font-bold font-heading-desktop-h2 mb-4">
-            '밥메이팅'으로 <br /> '밥친구 만들자!'
+            'YUMM'으로 <br /> '자밥추 시작하자!'
           </h1>
           <p className="text-xl font-text-regular-normal">
             새로운 사람들과 함께 식사하며 즐거운 시간을 보내세요.
           </p>
-          <Link to="/signup">
-            <button className="mt-8 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-m3-title-medium">
-              밥메이팅 시작하기
+          <Link to="/login">
+            <button className="mt-8 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-yellow-500 font-m3-title-medium">
+              YUMM 시작하기
             </button>
           </Link>
         </div>
@@ -30,7 +38,7 @@ const IntroPage: React.FC = () => {
       {/* 두 번째 섹션: 서비스 소개 */}
       <section className="w-full py-20 px-4 md:px-20 bg-white text-center">
         <h2 className="text-3xl font-bold font-heading-desktop-h2 mb-12">
-          밥메이팅은 이런 서비스에요
+          YUMM은 이런 서비스에요
         </h2>
         <div className="flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-12">
           <div className="flex flex-col items-center">
@@ -43,7 +51,7 @@ const IntroPage: React.FC = () => {
               랜덤 매칭
             </h3>
             <p className="text-gray-600 font-text-regular-normal">
-              다양한 사람들과 새로운 만남
+              다양한 사람들과 밥친구 만들고 식사하자!
             </p>
           </div>
           <div className="flex flex-col items-center">
@@ -65,7 +73,7 @@ const IntroPage: React.FC = () => {
       {/* 세 번째 섹션: 밥메이팅 이용 방법 */}
       <section className="w-full py-20 px-4 md:px-20 bg-gray-50 text-center">
         <h2 className="text-3xl font-bold font-heading-desktop-h2 mb-12">
-          밥메이팅이라면...
+          You Us Me Meal...YUMM!
         </h2>
         <div className="flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-12">
           <img

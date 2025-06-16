@@ -9,9 +9,9 @@ const CompanyLogo: React.FC<CompanyLogoProps> = ({ className }) => {
   // public 폴더에 있는 로고를 직접 참조
   return (
     <img
-      src="/company-logo.svg" // public 폴더의 경로
+      src="/company-logo2.svg" // public 폴더의 경로
       alt="Company Logo"
-      className={`h-full w-auto ${className}`}
+      className={`h-full w-100 ${className}`}
     />
   );
 };

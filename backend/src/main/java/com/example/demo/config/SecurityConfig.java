@@ -33,6 +33,8 @@ public class SecurityConfig {
     private static final String[] PUBLIC_URLS = {
         "/api/auth/**",     // 인증 관련 엔드포인트 (로그인, 토큰 재발급 등)
         "/api/user/signup", // 회원가입 엔드포인트
+        "/api/health/**",   // 헬스 체크 엔드포인트
+        "/actuator/**",     // Actuator 엔드포인트
 
         // Swagger 관련 경로
         "/swagger-ui.html",
@@ -58,7 +60,14 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost"));
+        configuration.setAllowedOrigins(Arrays.asList(
+            "http://localhost",
+            "http://localhost:3000", 
+            "http://localhost:5173",
+            "http://localhost:5174",
+            "http://127.0.0.1:5173",
+            "http://127.0.0.1:5174"
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);

@@ -1,13 +1,19 @@
 // frontend/src/contexts/AuthContext.tsx
 import React, { createContext, useContext, useState, useEffect } from "react";
-import type { ReactNode } from "react"; // 이곳을 이렇게 수정합니다.
-import { loginUser, registerUser } from "../api/auth";
+import type { ReactNode } from "react";
+import { loginUser, logoutUser, registerUser } from "../api";
+import type {
+  User,
+  UserResponse,
+  SignupRequest,
+  AuthResponseDto,
+} from "../api/types";
 
 interface AuthContextType {
-  user: any | null; // 실제 사용자 타입 정의 필요
+  user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<any>;
-  signup: (userData: any) => Promise<any>;
+  login: (email: string, password: string) => Promise<AuthResponseDto>;
+  signup: (userData: SignupRequest) => Promise<any>;
   logout: () => void;
   isLoading: boolean;
   error: string | null;
@@ -20,63 +26,127 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<any | null>(null);
-  const [isLoading, setIsLoading] = useState(true); // 초기 로딩 상태
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadUserFromLocalStorage = () => {
       try {
+        console.log("🔄 localStorage에서 사용자 정보 로드 시도");
         const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-          setUser(JSON.parse(storedUser));
+        const accessToken = localStorage.getItem("accessToken");
+
+        console.log("🔍 저장된 사용자 정보:", storedUser);
+        console.log("🔍 저장된 액세스 토큰:", accessToken ? "있음" : "없음");
+
+        if (storedUser && accessToken) {
+          const parsedUser = JSON.parse(storedUser);
+          console.log("🔍 파싱된 사용자 정보:", parsedUser);
+          setUser(parsedUser);
+          console.log("✅ 사용자 정보 로드 완료");
+        } else {
+          console.log("⚠️ 저장된 사용자 정보 또는 토큰이 없음");
         }
       } catch (e) {
-        console.error("Failed to parse user from local storage", e);
+        console.error("❌ localStorage 파싱 실패:", e);
         localStorage.removeItem("user");
         localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
       } finally {
         setIsLoading(false);
+        console.log("✅ 초기 로딩 완료");
       }
     };
     loadUserFromLocalStorage();
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (
+    email: string,
+    password: string
+  ): Promise<AuthResponseDto> => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await loginUser(email, password);
-      localStorage.setItem("accessToken", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      setUser(data.user);
-      return data;
+      const response = await loginUser(email, password);
+      console.log("🔍 로그인 응답 전체:", response);
+
+      // 백엔드 응답: { message: string, data: { accessToken, refreshToken, user } }
+      const authResponse = response.data;
+
+      if (authResponse?.data) {
+        const { accessToken, refreshToken, user } = authResponse.data;
+        console.log("🔍 추출된 데이터:", {
+          hasAccessToken: !!accessToken,
+          hasRefreshToken: !!refreshToken,
+          user: user,
+        });
+
+        if (accessToken && refreshToken && user) {
+          localStorage.setItem("accessToken", accessToken);
+          localStorage.setItem("refreshToken", refreshToken);
+          localStorage.setItem("user", JSON.stringify(user));
+          setUser(user);
+          console.log("✅ 로그인 성공, 토큰과 사용자 정보 저장 완료");
+        } else {
+          throw new Error("로그인 응답에 필수 데이터가 누락되었습니다.");
+        }
+      } else {
+        throw new Error("로그인 응답 구조가 올바르지 않습니다.");
+      }
+
+      return authResponse.data;
     } catch (err: any) {
-      setError(err.response?.data?.message || "로그인 실패");
+      console.error("❌ 로그인 에러:", err);
+      const errorMessage =
+        err.response?.data?.message || err.message || "로그인 실패";
+      setError(errorMessage);
       throw err;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const signup = async (userData: any) => {
+  const signup = async (userData: SignupRequest) => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await registerUser(userData);
-      return data;
+      console.log("🔄 회원가입 시도:", userData.email);
+      const response = await registerUser(userData);
+      console.log("🔍 회원가입 응답:", response);
+
+      // 회원가입 성공 확인
+      if (response.data && response.data.message) {
+        console.log("✅ 회원가입 성공:", response.data.message);
+      }
+
+      return response;
     } catch (err: any) {
-      setError(err.response?.data?.message || "회원가입 실패");
+      console.error("❌ 회원가입 에러:", err);
+      const errorMessage =
+        err.response?.data?.message || err.message || "회원가입 실패";
+      setError(errorMessage);
       throw err;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
-    setUser(null);
+  const logout = async () => {
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (refreshToken) {
+        await logoutUser(refreshToken);
+      }
+    } catch (err) {
+      console.error("Logout API call failed:", err);
+    } finally {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("user");
+      setUser(null);
+      console.log("🚪 로그아웃 완료");
+    }
   };
 
   const value = {
