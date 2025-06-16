@@ -49,10 +49,10 @@ const LoginPage: React.FC = () => {
           error={error}
         />
         <p className="mt-6 text-center text-gray-700 font-text-regular-normal">
-          Don't have an account?{" "}
+          아직 계정이 없으신가요?{" "}
           <Link
             to="/signup"
-            className="text-blue-700 hover:underline font-text-small-link"
+            className="text-red-700 hover:underline font-text-small-link"
           >
             회원가입
           </Link>

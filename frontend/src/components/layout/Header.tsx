@@ -10,9 +10,9 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   return (
-    <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-4 bg-white shadow-md">
+    <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-4 bg-red-400 shadow-md">
       {/* 로고 - 왼쪽 상단 고정, 클릭 시 메인 이동 */}
-      <Link to="/" className="h-9 flex items-center">
+      <Link to="/" className="h-20 flex items-center">
         <CompanyLogo className="h-full" />
       </Link>
       {/* 카테고리 네비게이션 */}

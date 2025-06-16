@@ -37,13 +37,13 @@ const SignUpPage: React.FC = () => {
           isLoading={isLoading}
           error={error}
         />
-        <p className="mt-6 text-center text-white text-sm font-text-regular-normal">
-          Already have an account?{" "}
+        <p className="mt-6 text-center text-black text-sm font-text-regular-normal">
+          이미 회원이신가요?{" "}
           <Link
             to="/login"
-            className="text-blue-200 hover:underline font-text-small-link"
+            className="text-red-500 hover:underline font-text-small-link"
           >
-            Login
+            로그인
           </Link>
         </p>
       </div>

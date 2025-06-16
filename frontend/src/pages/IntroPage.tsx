@@ -24,9 +24,7 @@ const IntroPage: React.FC = () => {
           <h1 className="text-4xl font-bold font-heading-desktop-h2 mb-4">
             'YUMM'으로 <br /> '자밥추 시작하자!'
           </h1>
-          <p className="text-xl font-text-regular-normal">
-            새로운 사람들과 함께 식사하며 즐거운 시간을 보내세요.
-          </p>
+          <p className="text-xl font-text-regular-normal">바로 시작하기!</p>
           <Link to="/login">
             <button className="mt-8 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-yellow-500 font-m3-title-medium">
               YUMM 시작하기
@@ -45,7 +43,7 @@ const IntroPage: React.FC = () => {
             <img
               src="/intro-illustration-1.png"
               alt="Illustration 1"
-              className="w-[300px] h-auto mb-4"
+              className="w-[600px] h-auto mb-4"
             />
             <h3 className="text-xl font-semibold font-heading-desktop-h5 mb-2">
               랜덤 매칭
@@ -56,7 +54,7 @@ const IntroPage: React.FC = () => {
           </div>
           <div className="flex flex-col items-center">
             <img
-              src="/intro-illustration-2.png"
+              src="/intro-illustration-3.png"
               alt="Illustration 2"
               className="w-[300px] h-auto mb-4"
             />
@@ -77,7 +75,7 @@ const IntroPage: React.FC = () => {
         </h2>
         <div className="flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-12">
           <img
-            src="/intro-illustration-1.png"
+            src="/intro-illustration-2.png"
             alt="Figma Hand"
             className="w-[400px] h-auto"
           />{" "}

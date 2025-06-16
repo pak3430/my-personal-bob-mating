@@ -111,7 +111,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
         className="w-full bg-black text-white py-3 rounded-md mt-6 hover:bg-gray-800"
         disabled={isLoading}
       >
-        {isLoading ? "회원가입 중..." : "Sign Up"}
+        {isLoading ? "회원가입 중..." : "가입하기"}
       </Button>
     </form>
   );

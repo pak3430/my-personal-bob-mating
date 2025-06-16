@@ -46,7 +46,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
         className="w-full bg-black text-white py-3 rounded-md mt-6 hover:bg-gray-800"
         disabled={isLoading}
       >
-        {isLoading ? "로그인 중..." : "Login"}
+        {isLoading ? "로그인 중..." : "로그인"}
       </Button>
     </form>
   );

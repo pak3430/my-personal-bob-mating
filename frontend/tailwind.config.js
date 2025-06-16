@@ -7,7 +7,12 @@ export default {
   ],
   theme: {
     extend: {
+      fontSize: {
+        'xxs': '10px',
+      },
       colors: {
+        'pastel-pink': '#FFD1DC',
+        'pastel-pink-dark': '#FFB6C1',
         'color-schemes-color-scheme-1-background': 'var(--color-schemes-color-scheme-1-background, #FEFCF3)',
         'color-schemes-color-scheme-1-on-background': 'var(--color-schemes-color-scheme-1-on-background, #2F2F2F)',
         'color-schemes-color-scheme-1-primary': 'var(--color-schemes-color-scheme-1-primary, #4A90E2)',
