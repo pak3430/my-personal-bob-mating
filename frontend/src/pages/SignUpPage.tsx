@@ -9,14 +9,30 @@ import { useToast } from "../hooks/useToast";
 
 const SignUpPage: React.FC = () => {
   const navigate = useNavigate();
-  const { signup, isLoading, error } = useAuth(); // useAuth 훅에서 회원가입 함수와 상태 가져오기
+  const { signup, login, isLoading, error } = useAuth(); // useAuth 훅에서 회원가입 함수와 상태 가져오기
   const { toasts, removeToast, showSuccess, showError } = useToast();
 
   const handleSignUpSubmit = async (userData: any) => {
     try {
+      // 1. 회원가입 시도
       await signup(userData);
       showSuccess("회원가입 성공!");
-      navigate("/login");
+
+      // 2. 자동 로그인 시도
+      try {
+        const loginResult = await login(userData.email, userData.password);
+        console.log("✅ 자동 로그인 성공:", loginResult);
+        showSuccess("로그인 성공! 마이페이지로 이동합니다.");
+
+        // 3. 로그인 성공 시 마이페이지로 이동
+        setTimeout(() => {
+          navigate("/mypage");
+        }, 1000);
+      } catch (loginErr) {
+        console.error("자동 로그인 실패:", loginErr);
+        showError("자동 로그인에 실패했습니다. 로그인 페이지로 이동합니다.");
+        navigate("/login");
+      }
     } catch (err) {
       console.error("회원가입 실패:", err);
       showError(error || "회원가입에 실패했습니다.");
