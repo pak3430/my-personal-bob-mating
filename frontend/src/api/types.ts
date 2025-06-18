@@ -2,7 +2,6 @@
 
 // Base API Response wrapper
 export interface ApiResponse<T> {
-  success: boolean;
   message: string;
   data: T;
 }
@@ -16,11 +15,11 @@ export interface LoginRequest {
 export interface AuthResponseDto {
   accessToken: string;
   refreshToken: string;
-  user: UserResponse;
 }
 
 export interface AccessTokenResponseDto {
   accessToken: string;
+  refreshToken: string;
 }
 
 export interface LogoutRequest {
@@ -29,7 +28,6 @@ export interface LogoutRequest {
 
 // === User Types ===
 export interface UserResponse {
-  id: number;
   email: string;
   nickname: string;
   gender: "MALE" | "FEMALE" | "UNKNOWN";
@@ -53,34 +51,23 @@ export interface SignupRequest {
 }
 
 export interface ProfileResponse {
-  id: number;
-  email: string;
   nickname: string;
-  gender: "MALE" | "FEMALE" | "UNKNOWN";
-  age: number;
-  phoneNumber: string;
-  profileImageUrl?: string | null;
-  role: "ROLE_USER" | "ROLE_ADMIN";
+  profileImageUrl?: string;
 }
 
 export interface ProfileUpdateRequest {
-  nickname?: string;
-  gender?: "MALE" | "FEMALE" | "UNKNOWN";
-  age?: number;
+  nickname: string;
   profileImageUrl?: string;
 }
 
 export interface UserInfoDetailsResponse {
-  id: number;
   email: string;
   nickname: string;
   gender: "MALE" | "FEMALE" | "UNKNOWN";
   age: number;
   phoneNumber: string;
-  profileImageUrl?: string | null;
+  profileImageUrl?: string;
   role: "ROLE_USER" | "ROLE_ADMIN";
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface EmailUpdateRequest {
@@ -109,39 +96,13 @@ export interface ChangePasswordRequest {
 // === Matching Types ===
 export interface MatchRequest {
   groupSize: number;
-  region:
-    | "SEOUL"
-    | "BUSAN"
-    | "DAEGU"
-    | "INCHEON"
-    | "GWANGJU"
-    | "DAEJEON"
-    | "ULSAN"
-    | "GYEONGGI"
-    | "GANGWON"
-    | "CHUNGBUK"
-    | "CHUNGNAM"
-    | "JEONBUK"
-    | "JEONNAM"
-    | "GYEONGBUK"
-    | "GYEONGNAM"
-    | "JEJU";
-  food:
-    | "KOREAN"
-    | "CHINESE"
-    | "JAPANESE"
-    | "WESTERN"
-    | "FASTFOOD"
-    | "CAFE"
-    | "MEXICAN"
-    | "INDIAN"
-    | "THAI"
-    | "VIETNAMESE";
+  region: Region;
+  food: Food;
 }
 
 export interface MatchResponse {
   matchId: number;
-  status: "PENDING" | "MATCHED" | "CANCELED";
+  status: MatchStatus;
   createdAt: string;
 }
 
@@ -149,7 +110,7 @@ export interface MatchStatus {
   matchId: number;
   status: "PENDING" | "MATCHED" | "CANCELED";
   createdAt: string;
-  matchedUserIds?: number[];
+  matchedUserIds: number;
 }
 
 // === Chat Types ===
@@ -184,22 +145,48 @@ export interface ChatRoomParticipant {
   joinedAt: string;
 }
 
-// === Common Enums ===
+// === Enums ===
+export enum Region {
+  SEOUL = "SEOUL",
+  BUSAN = "BUSAN",
+  DAEGU = "DAEGU",
+  INCHEON = "INCHEON",
+  GWANGJU = "GWANGJU",
+  DAEJEON = "DAEJEON",
+  ULSAN = "ULSAN",
+  GYEONGGI = "GYEONGGI",
+  GANGWON = "GANGWON",
+  CHUNGBUK = "CHUNGBUK",
+  CHUNGNAM = "CHUNGNAM",
+  JEONBUK = "JEONBUK",
+  JEONNAM = "JEONNAM",
+  GYEONGBUK = "GYEONGBUK",
+  GYEONGNAM = "GYEONGNAM",
+  JEJU = "JEJU",
+}
+
+export enum Food {
+  KOREAN = "KOREAN",
+  CHINESE = "CHINESE",
+  JAPANESE = "JAPANESE",
+  WESTERN = "WESTERN",
+  FASTFOOD = "FASTFOOD",
+  CAFE = "CAFE",
+  MEXICAN = "MEXICAN",
+  INDIAN = "INDIAN",
+  THAI = "THAI",
+  VIETNAMESE = "VIETNAMESE",
+}
+
 export enum Gender {
   MALE = "MALE",
   FEMALE = "FEMALE",
-}
-
-export enum MatchingStatus {
-  WAITING = "WAITING",
-  MATCHED = "MATCHED",
-  CANCELLED = "CANCELLED",
-  EXPIRED = "EXPIRED",
+  UNKNOWN = "UNKNOWN",
 }
 
 export enum UserRole {
-  USER = "USER",
-  ADMIN = "ADMIN",
+  USER = "ROLE_USER",
+  ADMIN = "ROLE_ADMIN",
 }
 
 // === Error Types ===

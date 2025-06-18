@@ -1,7 +1,6 @@
-// frontend/src/pages/MatchingLoadingPage.tsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CompanyLogo from "../components/common/CompanyLogo"; // 로고 컴포넌트 추가
+import CompanyLogo from "../components/common/CompanyLogo";
 
 const MatchingLoadingPage: React.FC = () => {
   const navigate = useNavigate();
@@ -30,17 +29,27 @@ const MatchingLoadingPage: React.FC = () => {
   }, [navigate]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-color-schemes-color-scheme-1-background p-4">
-      <div className="flex justify-center mb-8">
+    <div className="flex flex-col items-center justify-center h-screen bg-color-schemes-color-scheme-1-background p-0">
+      <div
+        className="w-full flex justify-center items-center"
+        style={{ height: "80px" }}
+      >
         <CompanyLogo className="h-16 w-auto" />
       </div>
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-blue-500 mb-6 mx-auto"></div>
+      <div className="flex-1 w-full flex items-center justify-center">
+        <img
+          src="/matching-loading.gif"
+          alt="로딩 애니메이션"
+          className="w-full h-full object-contain"
+          style={{ maxHeight: "calc(100vh - 200px)" }}
+        />
+      </div>
+      <div className="w-full text-center pb-8">
         <h1 className="text-3xl font-heading-desktop-h2 text-gray-800 mb-4">
           {loadingText}
         </h1>
         <p className="text-lg text-gray-600 font-text-regular-normal">
-          잠시만 기다려주세요. 최적의 밥메이트를 찾고 있습니다.
+          잠시만 기다려주세요. 최적의 얌친구를 찾고 있습니다.
         </p>
       </div>
     </div>

@@ -46,20 +46,15 @@ export class AuthController {
   }
 }
 
-// 기존 함수들과의 호환성을 위한 export
-export const login = AuthController.login;
-export const logout = AuthController.logout;
-export const refreshToken = AuthController.refreshToken;
-
 // 기존 함수들과의 호환성을 위한 wrapper 함수들
-export const loginUser = async (email: string, password: string) => {
-  return await apiClient.post("/api/auth/login", { email, password });
+export const loginUser = async (loginData: LoginRequest) => {
+  return await AuthController.login(loginData);
 };
 
 export const logoutUser = async (refreshToken: string) => {
-  return await apiClient.post("/api/auth/logout", { refreshToken });
+  return await AuthController.logout({ refreshToken });
 };
 
 export const refreshAccessToken = async (refreshToken: string) => {
-  return await apiClient.post("/api/auth/refresh", { refreshToken });
+  return await AuthController.refreshToken(refreshToken);
 };

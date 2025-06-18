@@ -10,19 +10,21 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   return (
-    <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-4 bg-white shadow-md">
+    <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-4 bg-red-400 shadow-md">
       {/* 로고 - 왼쪽 상단 고정, 클릭 시 메인 이동 */}
-      <Link to="/" className="h-9 flex items-center">
+      <Link to="/" className="h-20 flex items-center">
         <CompanyLogo className="h-full" />
       </Link>
       {/* 카테고리 네비게이션 */}
       <nav className="flex space-x-6">
         {/* 맛집추천 드롭다운 */}
         <div className="relative group">
-          <button className="text-gray-700 hover:text-blue-600 font-semibold">
+          {/* 여기에 py-4 추가 */}
+          <button className="text-gray-700 hover:text-red-600 font-semibold py-4">
             맛집추천
           </button>
-          <div className="absolute left-0 mt-2 w-40 bg-white border rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity z-50">
+          {/* 드롭다운 컨테이너의 mt-2를 pt-0으로 변경하고 필요 시 top 위치 조정 */}
+          <div className="absolute left-0 mt-0 pt-2 w-40 bg-white border rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity z-50">
             <Link
               to="/today-restaurant"
               className="block px-4 py-2 hover:bg-gray-100"
@@ -45,10 +47,11 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
         </div>
         {/* 커뮤니티 드롭다운 */}
         <div className="relative group">
-          <button className="text-gray-700 hover:text-blue-600 font-semibold">
+          {/* 여기에 py-4 추가 */}
+          <button className="text-gray-700 hover:text-red-600 font-semibold py-4">
             커뮤니티
           </button>
-          <div className="absolute left-0 mt-2 w-40 bg-white border rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity z-50">
+          <div className="absolute left-0 mt-0 pt-2 w-40 bg-white border rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity z-50">
             <a
               href="https://instagram.com"
               target="_blank"
@@ -69,10 +72,11 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
         </div>
         {/* 얌스토리 드롭다운 */}
         <div className="relative group">
-          <button className="text-gray-700 hover:text-blue-600 font-semibold">
+          {/* 여기에 py-4 추가 */}
+          <button className="text-gray-700 hover:text-red-600 font-semibold py-4">
             얌스토리
           </button>
-          <div className="absolute left-0 mt-2 w-40 bg-white border rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity z-50">
+          <div className="absolute left-0 mt-0 pt-2 w-40 bg-white border rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity z-50">
             <Link to="/yamstory" className="block px-4 py-2 hover:bg-gray-100">
               얌스토리의 시작
             </Link>
@@ -80,10 +84,11 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
         </div>
         {/* 고객지원 드롭다운 */}
         <div className="relative group">
-          <button className="text-gray-700 hover:text-blue-600 font-semibold">
+          {/* 여기에 py-4 추가 */}
+          <button className="text-gray-700 hover:text-red-600 font-semibold py-4">
             고객지원
           </button>
-          <div className="absolute left-0 mt-2 w-40 bg-white border rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity z-50">
+          <div className="absolute left-0 mt-0 pt-2 w-40 bg-white border rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity z-50">
             <Link
               to="/support/inquiry"
               className="block px-4 py-2 hover:bg-gray-100"

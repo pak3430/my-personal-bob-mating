@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="w-full py-12 px-4 md:px-20 bg-gray-800 text-white text-center">
+    <footer className="w-full py-12 px-4 md:px-20 bg-red-400 text-white text-center">
       <CompanyLogo className="h-10 mx-auto mb-4" />
       <p className="text-sm font-text-small-normal">
         &copy; {new Date().getFullYear()} YUMM. All rights reserved.

@@ -32,7 +32,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {/* Header 높이만큼 paddingTop 추가 */}
         {/* 사이드바 영역 - 오른쪽 */}
         <aside
-          className={`fixed top-0 right-0 h-full bg-color-schemes-color-scheme-1-background border-l border-solid border-black z-40
+          className={`fixed top-0 right-0 h-full bg-yellow-100 border-l border-solid border-black z-40
             ${isSidebarOpen ? "translate-x-0" : "translate-x-full"}
             w-[300px] flex-shrink-0 pt-[64px] transition-transform duration-500 ease-[cubic-bezier(0.77,0,0.175,1)]`}
         >
