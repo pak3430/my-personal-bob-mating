@@ -23,16 +23,6 @@ public class AuthController {
     private final AuthService authService;
 
     /**
-     * 백엔드 연결 테스트 API
-     */
-    @GetMapping("/test")
-    @Operation(summary = "백엔드 연결 테스트", description = "프론트엔드에서 백엔드 연결 상태를 확인합니다.")
-    public ResponseEntity<String> testConnection() {
-        log.info("백엔드 연결 테스트 요청 받음");
-        return ResponseEntity.ok("백엔드 서버가 정상적으로 작동 중입니다. 시간: " + java.time.LocalDateTime.now());
-    }
-
-    /**
      * 사용자 로그인 API.
      * 아이디(이메일)와 비밀번호를 통해 사용자를 인증하고, Access Token과 Refresh Token을 발급합니다.
      *
@@ -42,28 +32,10 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "사용자 로그인", description = "아이디/비밀번호를 통해 로그인하고 JWT를 반환합니다.")
     public ResponseEntity<ApiResponse<AuthResponseDto>> login(@RequestBody LoginRequest loginRequest) {
-        log.info("로그인 요청: 이메일 = {}", loginRequest.getEmail());
 
         AuthResponseDto response = authService.login(loginRequest);
-        log.info("로그인 성공: 사용자 ID = {}", response.getUser().getId());
 
         return ApiResponse.ok("로그인 성공", response);
-    }
-
-    /**
-     * 사용자 회원가입 API.
-     * 새로운 사용자를 등록합니다.
-     *
-     * @param registerRequest 회원가입 요청에 필요한 사용자 정보를 담은 DTO
-     * @return 회원가입 성공 메시지를 포함하는 응답
-     */
-    @PostMapping("/register")
-    @Operation(summary = "사용자 회원가입", description = "새로운 사용자를 등록합니다.")
-    public ResponseEntity<ApiResponse<Void>> register(@RequestBody RegisterRequest registerRequest) {
-        log.info("회원가입 요청: 이메일 = {}", registerRequest.getEmail());
-        authService.register(registerRequest);
-        log.info("회원가입 성공: 이메일 = {}", registerRequest.getEmail());
-        return ApiResponse.ok("회원가입 성공");
     }
 
 

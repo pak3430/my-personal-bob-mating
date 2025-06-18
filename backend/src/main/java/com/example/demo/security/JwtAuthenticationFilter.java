@@ -35,11 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // JWT 인증 필터 건너뛸 엔드포인트 작성(AccessToken을 들고 있는 경우만 필터링)
     private static final List<String> EXCLUDE_URLS = Arrays.asList(
-            "/api/auth/login",      // 로그인 (토큰 발급 전)
-            "/api/auth/register",   // 회원가입 (토큰 발급 전)
-            "/api/auth/test",       // 백엔드 연결 테스트
-            "/api/health",          // 헬스 체크
-            "/api/health/**",       // 헬스 체크 하위 경로
+            "/api/auth/login", // 로그인 (토큰 발급 전)
             "/api/user/signup",     // 회원가입 (토큰 발급 전)
             "/api/auth/refresh",    // Refresh Token으로 Access Token 재발급 (Access Token 아님)
             "/api/auth/logout",     // Refresh Token으로 로그아웃 (Access Token 아님)

@@ -3,13 +3,10 @@ package com.example.demo.service.impl;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.JwtRedisService;
 import com.example.demo.domain.User;
-import com.example.demo.domain.UserRole;
 import com.example.demo.dto.auth.AccessTokenResponseDto;
 import com.example.demo.dto.auth.LoginRequest;
 import com.example.demo.dto.auth.AuthResponseDto;
 import com.example.demo.dto.auth.LogoutRequest;
-import com.example.demo.dto.auth.RegisterRequest;
-import com.example.demo.dto.users.UserResponseDto;
 import com.example.demo.exception.CustomException;
 import com.example.demo.exception.ErrorCode;
 import com.example.demo.repository.UserRepository;
@@ -21,12 +18,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class AuthServiceImpl implements AuthService {
        
     private final UserRepository            userRepository;
@@ -38,79 +33,26 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponseDto login(LoginRequest loginRequest) {
         String email = loginRequest.getEmail();
-        log.info("로그인 처리 시작: 이메일 = {}", email);
 
         // 사용자 조회
         User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> {
-                log.warn("사용자를 찾을 수 없음: 이메일 = {}", email);
-                return new CustomException(ErrorCode.USER_NOT_FOUND);
-            });
-
-        log.info("사용자 조회 성공: ID = {}, 닉네임 = {}", user.getId(), user.getNickname());
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 비밀번호 검증
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            log.warn("비밀번호 불일치: 이메일 = {}", email);
             throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
         }
-
-        log.info("비밀번호 검증 성공: 이메일 = {}", email);
 
         // AccessToken 생성
         List<String> roles = List.of(user.getRole().getRoleName());
         String accessToken = jwtUtils.generateAccessToken(user.getId(), user.getEmail(), roles);
-        log.info("AccessToken 생성 완료: 사용자 ID = {}", user.getId());
         
         // RefreshToken 생성 및 Redis에 저장(userId가 key값)
         String refreshToken = jwtUtils.generateRefreshToken(user.getId(),user.getEmail(),roles);
         jwtRedisService.saveRefreshToken(user.getId(), refreshToken, jwtUtils.getRefreshTokenMillis());
-        log.info("RefreshToken 생성 및 Redis 저장 완료: 사용자 ID = {}", user.getId());
        
-        // 사용자 정보 DTO 생성
-        UserResponseDto userDto = UserResponseDto.from(user);
-        log.info("UserResponseDto 생성 완료: {}", userDto);
-        
         // 응답 DTO 반환
-        AuthResponseDto authResponse = AuthResponseDto.of(accessToken, refreshToken, userDto);
-        log.info("AuthResponseDto 생성 완료 - 토큰 길이: access={}, refresh={}", 
-                accessToken.length(), refreshToken.length());
-        
-        return authResponse;
-    }
-
-    /** 사용자 회원가입 처리 */
-    @Override
-    @Transactional
-    public void register(RegisterRequest registerRequest) {
-        String email = registerRequest.getEmail();
-        log.info("회원가입 처리 시작: 이메일 = {}", email);
-        
-        // 이메일 중복 확인
-        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
-            log.warn("이메일 중복: {}", email);
-            throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
-        }
-
-        log.info("이메일 중복 확인 완료: {}", email);
-
-        // 비밀번호 암호화
-        String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
-        log.info("비밀번호 암호화 완료: {}", email);
-
-        // 사용자 생성 및 저장
-        User newUser = User.builder()
-            .email(registerRequest.getEmail())
-            .password(encodedPassword)
-            .nickname(registerRequest.getNickname())
-            .phoneNumber(registerRequest.getPhone_num())
-            .gender(registerRequest.getGender())
-            .age(registerRequest.getAge())
-            .role(UserRole.ROLE_USER) // UserRole enum 사용
-            .build();
-
-        User savedUser = userRepository.save(newUser);
-        log.info("회원가입 완료: 사용자 ID = {}, 이메일 = {}", savedUser.getId(), savedUser.getEmail());
+        return AuthResponseDto.of(accessToken, refreshToken);
     }
 
 
