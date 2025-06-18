@@ -3,101 +3,81 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import { loginUser, logoutUser, registerUser } from "../api";
 import type {
-  User,
   UserResponse,
   SignupRequest,
   AuthResponseDto,
+  UserInfoDetailsResponse,
+  LoginRequest,
+  ApiResponse,
 } from "../api/types";
+import { apiClient } from "../api/client";
 
 interface AuthContextType {
-  user: User | null;
+  user: UserInfoDetailsResponse | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<AuthResponseDto>;
-  signup: (userData: SignupRequest) => Promise<any>;
+  signup: (userData: SignupRequest) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
   error: string | null;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
 interface AuthProviderProps {
   children: ReactNode;
 }
 
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<UserInfoDetailsResponse | null>(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // 토큰이 있을 때 사용자 정보 가져오기
+  const fetchUserInfo = async () => {
+    try {
+      const response = await apiClient.get<
+        ApiResponse<UserInfoDetailsResponse>
+      >("/api/user/me/details");
+      const userInfo = response.data.data;
+      setUser(userInfo);
+      localStorage.setItem("user", JSON.stringify(userInfo));
+    } catch (err) {
+      console.error("Failed to fetch user info:", err);
+      setUser(null);
+      localStorage.removeItem("user");
+    }
+  };
+
+  // 토큰이 있을 때 자동으로 사용자 정보 가져오기
   useEffect(() => {
-    const loadUserFromLocalStorage = () => {
-      try {
-        console.log("🔄 localStorage에서 사용자 정보 로드 시도");
-        const storedUser = localStorage.getItem("user");
-        const accessToken = localStorage.getItem("accessToken");
-
-        console.log("🔍 저장된 사용자 정보:", storedUser);
-        console.log("🔍 저장된 액세스 토큰:", accessToken ? "있음" : "없음");
-
-        if (storedUser && accessToken) {
-          const parsedUser = JSON.parse(storedUser);
-          console.log("🔍 파싱된 사용자 정보:", parsedUser);
-          setUser(parsedUser);
-          console.log("✅ 사용자 정보 로드 완료");
-        } else {
-          console.log("⚠️ 저장된 사용자 정보 또는 토큰이 없음");
-        }
-      } catch (e) {
-        console.error("❌ localStorage 파싱 실패:", e);
-        localStorage.removeItem("user");
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-      } finally {
-        setIsLoading(false);
-        console.log("✅ 초기 로딩 완료");
-      }
-    };
-    loadUserFromLocalStorage();
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      fetchUserInfo();
+    }
   }, []);
 
-  const login = async (
-    email: string,
-    password: string
-  ): Promise<AuthResponseDto> => {
+  const login = async (email: string, password: string) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await loginUser(email, password);
-      console.log("🔍 로그인 응답 전체:", response);
+      const loginRequest: LoginRequest = { email, password };
+      const response = await loginUser(loginRequest);
+      const { accessToken, refreshToken } = response.data;
 
-      // 백엔드 응답: { message: string, data: { accessToken, refreshToken, user } }
-      const authResponse = response.data;
+      // 토큰 저장
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
 
-      if (authResponse?.data) {
-        const { accessToken, refreshToken, user } = authResponse.data;
-        console.log("🔍 추출된 데이터:", {
-          hasAccessToken: !!accessToken,
-          hasRefreshToken: !!refreshToken,
-          user: user,
-        });
+      // 사용자 정보 가져오기
+      await fetchUserInfo();
 
-        if (accessToken && refreshToken && user) {
-          localStorage.setItem("accessToken", accessToken);
-          localStorage.setItem("refreshToken", refreshToken);
-          localStorage.setItem("user", JSON.stringify(user));
-          setUser(user);
-          console.log("✅ 로그인 성공, 토큰과 사용자 정보 저장 완료");
-        } else {
-          throw new Error("로그인 응답에 필수 데이터가 누락되었습니다.");
-        }
-      } else {
-        throw new Error("로그인 응답 구조가 올바르지 않습니다.");
-      }
-
-      return authResponse.data;
+      return { accessToken, refreshToken };
     } catch (err: any) {
-      console.error("❌ 로그인 에러:", err);
+      console.error("Login error:", err);
       const errorMessage =
         err.response?.data?.message || err.message || "로그인 실패";
       setError(errorMessage);
@@ -111,18 +91,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(true);
     setError(null);
     try {
-      console.log("🔄 회원가입 시도:", userData.email);
       const response = await registerUser(userData);
-      console.log("🔍 회원가입 응답:", response);
-
-      // 회원가입 성공 확인
-      if (response.data && response.data.message) {
-        console.log("✅ 회원가입 성공:", response.data.message);
-      }
-
-      return response;
+      return response.data;
     } catch (err: any) {
-      console.error("❌ 회원가입 에러:", err);
+      console.error("Signup error:", err);
       const errorMessage =
         err.response?.data?.message || err.message || "회원가입 실패";
       setError(errorMessage);
@@ -145,7 +117,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("user");
       setUser(null);
-      console.log("🚪 로그아웃 완료");
     }
   };
 
@@ -162,10 +133,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export const useAuthContext = () => {
+export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuthContext must be used within an AuthProvider");
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
+
+export default AuthContext;

@@ -1,4 +1,15 @@
 // frontend/src/api/index.ts
+import type {
+  LoginRequest,
+  AuthResponseDto,
+  SignupRequest,
+  ProfileUpdateRequest,
+  EmailUpdateRequest,
+  PhoneNumberUpdateRequest,
+  ChangePasswordRequest,
+  MatchRequest,
+  ChatMessageRequest,
+} from "./types";
 
 // === API Client ===
 export { apiClient, tokenUtils, checkApiHealth } from "./client";
@@ -17,6 +28,7 @@ export * from "./auth.controller";
 export * from "./user.controller";
 export * from "./matching.controller";
 export * from "./chat.controller";
+export * from "./types";
 
 // Re-export controller classes
 export { AuthController, UserController, MatchingController, ChatController };
@@ -24,28 +36,32 @@ export { AuthController, UserController, MatchingController, ChatController };
 // === Re-export for convenience ===
 export default {
   auth: {
-    login: (data: any) => AuthController.login(data),
-    logout: (data: any) => AuthController.logout(data),
+    login: (data: LoginRequest) => AuthController.login(data),
+    logout: (refreshToken: string) => AuthController.logout({ refreshToken }),
     refreshToken: (token: string) => AuthController.refreshToken(token),
   },
   user: {
-    signup: (data: any) => UserController.signup(data),
+    signup: (data: SignupRequest) => UserController.signup(data),
     getProfile: () => UserController.getProfile(),
-    updateProfile: (data: any) => UserController.updateProfile(data),
+    updateProfile: (data: ProfileUpdateRequest) =>
+      UserController.updateProfile(data),
     getUserDetails: () => UserController.getUserDetails(),
-    updateEmail: (data: any) => UserController.updateEmail(data),
-    updatePhoneNumber: (data: any) => UserController.updatePhoneNumber(data),
-    changePassword: (data: any) => UserController.changePassword(data),
+    updateEmail: (data: EmailUpdateRequest) => UserController.updateEmail(data),
+    updatePhoneNumber: (data: PhoneNumberUpdateRequest) =>
+      UserController.updatePhoneNumber(data),
+    changePassword: (data: ChangePasswordRequest) =>
+      UserController.changePassword(data),
     withdraw: () => UserController.withdraw(),
   },
   matching: {
-    requestMatching: (data: any) => MatchingController.requestMatching(data),
+    requestMatching: (data: MatchRequest) =>
+      MatchingController.requestMatching(data),
     getMyMatchingStatus: () => MatchingController.getMyMatchingStatus(),
     cancelMatching: (id: number) => MatchingController.cancelMatching(id),
   },
   chat: {
     getChatMessages: (roomId: number) => ChatController.getChatMessages(roomId),
-    sendMessage: (roomId: number, data: any) =>
+    sendMessage: (roomId: number, data: ChatMessageRequest) =>
       ChatController.sendMessage(roomId, data),
     getChatRooms: () => ChatController.getChatRooms(),
     getChatRoom: (roomId: number) => ChatController.getChatRoom(roomId),
